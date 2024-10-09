@@ -1,17 +1,7 @@
 import { Router } from "express"
-import { LeadsController } from "./Controllers/LeadsController"
-import { GroupsController } from "./Controllers/GroupsController"
-import { CampaignsController } from "./Controllers/CampaignsController"
-import { CampaignLeadsController } from "./Controllers/CampaignLeadsController"
-import { GroupLeadsController } from "./Controllers/GroupLeadsController"
+import { campaignLeadsController, campaignsController, groupLeadsController, groupsController, leadsController } from "./container"
 
 const router = Router()
-
-const leadsController = new LeadsController()
-const groupsController = new GroupsController()
-const campaignsController = new CampaignsController()
-const campaignLeadsController = new CampaignLeadsController()
-const groupLeadsController = new GroupLeadsController
 
 router.get("/leads", leadsController.index)
 router.post("/leads", leadsController.create)
@@ -25,6 +15,10 @@ router.get("/groups/:id", groupsController.show)
 router.put("/groups/:id", groupsController.update)
 router.delete("/groups/:id", groupsController.delete)
 
+router.get("/groups/:groupId/leads", groupLeadsController.getLeads)
+router.post("/groups/:groupId/leads", groupLeadsController.addLead)
+router.delete("/groups/:groupId/leads/:leadId", groupLeadsController.removeLead)
+
 router.get("/campaigns", campaignsController.index)
 router.post("/campaigns", campaignsController.create)
 router.get("/campaigns/:id", campaignsController.show)
@@ -35,10 +29,6 @@ router.get("/campaigns/:campaignId/leads", campaignLeadsController.getLeads)
 router.post("/campaigns/:campaignId/leads", campaignLeadsController.addLead)
 router.put("/campaigns/:campaignId/leads/:leadId", campaignLeadsController.updateLeadStatus)
 router.delete("/campaigns/:campaignId/leads/:leadId", campaignLeadsController.removeLead)
-
-router.get('/api/groups/:groupId/leads', groupLeadsController.getLeads)
-router.post('/api/groups/:groupId/leads', groupLeadsController.addLead)
-router.delete('/api/groups/:groupId/leads/:leadId', groupLeadsController.removeLead)
 
 router.get("/status", async (req, res, next) => {
   try {
